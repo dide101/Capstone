@@ -64,6 +64,7 @@ class Window(QtGui.QDialog):
                 self.timer = self.startTimer(3)
                 
         def timerEvent(self, event):
+                
                 self.ani = animation.FuncAnimation(self.figure, self.update, interval = 3, save_count = 50, blit=False)
                 self.figure.canvas.draw()
 
@@ -72,13 +73,18 @@ class Window(QtGui.QDialog):
                 Array = serial.readSensors(ser, sensor_num)
                 data = serial.matrixConvert(Array, num_rows, num_cols) 
                 #return data
-
-                print("updating")
-                self.ax.clear()
+                #print("updating")
+ #               self.ax.clear()
                 #mat.set_data(data)
                 self.ax.matshow(data)
                 plt.axis('off')
                 #return mat
+                
+        def generate_data(self):
+                #gets stuck at this line???
+                Array = serial.readSensors(ser, self.sensor_num)
+                data = serial.matrixConvert(Array, self.num_rows, self.num_cols)
+                return data
 
 if __name__ == '__main__':
         app = QtGui.QApplication(sys.argv)
