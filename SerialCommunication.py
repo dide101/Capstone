@@ -12,13 +12,15 @@ def readSensors(ser, sensor_num):
     #while True: 
         #Input = ser.read(sensor_num)
         #ByteArray = bytearray(Input)
+    try: 
         Line = ser.readline()
         Line = Line.split(',')
         Line.pop()
         Line.pop()
-        #print(Line)
-        #print(line)
+#        print(Line)
         return Line
+    except:
+        print("Failed reading Serial")
 
 def matrixConvert(Array, num_rows, num_cols):
     matrix = np.zeros((num_rows, num_cols))
@@ -26,6 +28,5 @@ def matrixConvert(Array, num_rows, num_cols):
     for i in range(0, num_rows):
         for j in range(0, num_cols):
             matrix[i,j] = Array[j*num_rows + i]
-#            print(i, j, i*num_cols + j)
- #   matrix[0,0] = 255
+ #           print(i, j, i*num_cols + j)
     return matrix
