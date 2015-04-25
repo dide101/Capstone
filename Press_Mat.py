@@ -9,8 +9,8 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import SerialCommunication as serial
 
 #constants
-num_rows = 7
-num_cols = 4
+num_rows = 10
+num_cols = 5
 sensor_num = num_rows*num_cols
 
 ser = serial.sensorInit()
@@ -26,6 +26,7 @@ class Press_Mat(QtGui.QWidget):
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.grid = serial.matrixConvert(Array, num_rows, num_cols)
+        self.grid[0,0] = 1000
         self.start()
 
     def start(self):

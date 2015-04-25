@@ -5,7 +5,7 @@ import string
 import numpy as np
 
 def sensorInit():
-    ser = serial.Serial('/dev/cu.usbmodemfd121', 9600, bytesize=serial.EIGHTBITS)
+    ser = serial.Serial('/dev/cu.usbmodemfa131', 115200, bytesize=serial.EIGHTBITS)
     return ser
 
 def readSensors(ser, sensor_num):
@@ -27,6 +27,6 @@ def matrixConvert(Array, num_rows, num_cols):
     #print(matrix)
     for i in range(0, num_rows):
         for j in range(0, num_cols):
-            matrix[i,j] = Array[j*num_rows + i]
- #           print(i, j, i*num_cols + j)
+            matrix[i,j] = Array[i*num_cols + j]
+           # print(i, j, i*num_cols + j)
     return matrix
