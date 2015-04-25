@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from SerialCommunication import *
 
+FFMPEG_BIN="ffmpeg"
 
 ser = sensorInit()
 num_rows = 7
@@ -35,8 +36,8 @@ def data_gen():
 fig, ax = plt.subplots()
 mat = ax.matshow(Matrix, interpolation='bicubic')
 plt.colorbar(mat)
-ani = animation.FuncAnimation(fig, update, data_gen, interval=33, save_count=50, 
+ani = animation.FuncAnimation(fig, update, data_gen, interval=3, save_count=150, 
 blit=False)
-#ani.save('blah.mp4')
+ani.save('blah.mp4', writer="ffmpeg", fps=15)
 
 plt.show()

@@ -22,43 +22,49 @@ class Press_Mat(QtGui.QWidget):
         super(Press_Mat, self).__init__()
         for i in range (4):
             Array = serial.readSensors(ser, 28)
-            
-        self.button = QtGui.QPushButton('Start')
-        self.button.clicked.connect(self.start)
+
+        self.figure = plt.figure()
+        self.canvas = FigureCanvas(self.figure)
         self.grid = serial.matrixConvert(Array, num_rows, num_cols)
-        
         self.start()
 
     def start(self):
         self.setWindowTitle('PressMat')
         gridLayout = QtGui.QGridLayout()    
         self.setLayout(gridLayout)
-
-        #Figure and subplot
-        figure = plt.figure()
-        canvas = FigureCanvas(figure)
-        ax = figure.add_subplot(111)
-        canvas.draw()
-
-        self.mat = ax.matshow(self.grid, interpolation='bicubic')
-        plt.axis('off')
-        ani = animation.FuncAnimation(figure, self.update, interval=3, save_count=50)
         
         #button
-        restart = QtGui.QPushButton("Restart")
-        restart.clicked.connect(partial(self.restart_animation, ax=ax, figure=figure))
+        restart = QtGui.QPushButton("Start")
+        restart.clicked.connect(self.plot)
 
-        gridLayout.addWidget(canvas,0,0)
+        #checkbox
+        self.record = QtGui.QCheckBox('Record', self)
+        
+
+        gridLayout.addWidget(self.canvas,0,0)
         gridLayout.addWidget(restart, 1,0)
+        gridLayout.addWidget(self.record, 2,0)
         self.show()
+
+    def plot(self):
+        #Figure and subplot
+
+        ax = self.figure.add_subplot(111)
+        self.mat = ax.matshow(self.grid, interpolation='bicubic')
+        plt.axis('off')
+            
+        ani = animation.FuncAnimation(self.figure, self.update, interval=3, save_count=500)
+
+        if (self.record.checkState() != 0):
+            ani.save('bruh.mp4', writer="ffmpeg")
+            
+        self.canvas.draw()
         
     def update(self, data):
         #print('Updating')
         newGrid = self.grid.copy()
         Array = serial.readSensors(ser, sensor_num)
         newGrid = serial.matrixConvert(Array, num_rows, num_cols)
-        #print(newGrid)
-        
         self.mat.set_data(newGrid)
         self.grid = newGrid
 
