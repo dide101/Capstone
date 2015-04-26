@@ -11,7 +11,7 @@ import SerialCommunication as serial
 #constants
 num_rows = 10
 num_cols = 5
-frames = 400
+frames = 1000
 i = 0
 
 SaveArray = [[0]*50]*(frames+1)
@@ -61,7 +61,7 @@ class Press_Mat(QtGui.QWidget):
         #Figure and subplot
 
         ax = self.figure.add_subplot(111)
-        self.mat = ax.matshow(self.grid,  vmin=0, vmax=1000, interpolation='bilinear')
+        self.mat = ax.matshow(self.grid,  vmin=0, vmax=1000, interpolation='bicubic')
         plt.axis('off')
             
         ani = animation.FuncAnimation(self.figure, self.update, interval=3, save_count=500)
@@ -100,6 +100,7 @@ class Press_Mat(QtGui.QWidget):
     #simply restarts data
         
     def restart_animation(self):
+##        print("bruh")
     #if (self.record.checkState() != 0);
         global i
         i = 0
@@ -111,17 +112,13 @@ class Press_Mat(QtGui.QWidget):
  #       self.grid[0,0] = 1000
 #        self.grid[0,1] = 0
         ax = self.figure.add_subplot(111)
-        self.mat = ax.matshow(self.grid, vmin=0, vmax=1000, interpolation='bilinear')
+        self.mat = ax.matshow(self.grid, vmin=0, vmax=1000, interpolation='bicubic')
 
         #delete after debugging
         plt.colorbar(self.mat)
         ani = animation.FuncAnimation(self.figure, self.new_update, save_count=frames)
         ani.save('PressMat.mp4',fps=30, bitrate=333)
         sys.exit()
-##        self.grid = np.zeros((num_rows,num_cols))
-##        self.mat = ax.matshow(self.grid)
-##
-
 def main():
     app = QtGui.QApplication(sys.argv)
     widget = Press_Mat()
